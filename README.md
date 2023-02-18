@@ -1,7 +1,7 @@
 # eVoting-based-on-Blockchain
 this is the repo for eVoting based on Blockchin
 
-step1:- learning solidity language
+step 1:- learning solidity language
 step 2: learning Metamask(cryptowallet) and Ganche 
 step 3:-how to connect third web connection(web3)
 step 4:- learning hardhat framework
