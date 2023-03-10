@@ -31,15 +31,24 @@ module.exports = {
         });
     },
     authenticate: function(req, res, cb) {
+        // console.log("Here in auth func.");
+
         CompanyModel.findOne({email:req.body.email}, function(err, CompanyInfo){
-            if (err) 
+            
+            console.log(CompanyInfo.password + " - " + CompanyInfo.email);
+            console.log("Here in find ONE func.");
+            if (err) {
                 cb(err);
+                // console.log(err+": errrrrr");
+            }
             else {
+                // console.log("Outside bcrypt");
                 if(bcrypt.compareSync(req.body.password, CompanyInfo.password) && CompanyInfo.email == req.body.email) {
-                    
+                    // console.log("COmpany found");
                     res.json({status:"success", message: "company found!!!", data:{id: CompanyInfo._id, email: CompanyInfo.email}});
                 }
                 else {
+                    // console.log("COmpany !found");
                     res.json({status:"error", message: "Invalid email/password!!!", data:null});
                 }
             }

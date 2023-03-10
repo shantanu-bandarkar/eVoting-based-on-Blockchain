@@ -77,11 +77,13 @@ class DividerExampleVerticalForm extends Component {
       );
       http.onreadystatechange = function() {
         //Call a function when the state changes.
+
         if (http.readyState == 4 && http.status == 200) {
 		  var responseObj = JSON.parse(http.responseText);
 		  if(responseObj.status=="success") {
             Cookies.set('company_id', encodeURI(responseObj.data.id));
             Cookies.set('company_email', encodeURI(responseObj.data.email)); 
+            Router.pushRoute(`/election/create_election`);
 		  }
 		  else {
 			alert(responseObj.message);
@@ -90,20 +92,23 @@ class DividerExampleVerticalForm extends Component {
         }
       };
       http.send(params); 
-      try {
-        const accounts = await web3.eth.getAccounts();
-        const summary = await Election_Factory.methods.getDeployedElection(this.state.email).call({from: accounts[0]});
-        if(summary[2] == "Create an election.") {            
-            Router.pushRoute(`/election/create_election`);
-        }
-        else {           
-            Cookies.set('address',summary[0]);
-            Router.pushRoute(`/election/${summary[0]}/company_dashboard`);
-        }
-    }
-    catch (err) {
-        console.log(err.Message);
-    }
+    //   try {
+    //     const accounts = await web3.eth.getAccounts();
+    //     console.log(" in try section"+ " accounts: " + accounts[0]);
+    //     const summary = await Election_Factory.methods.getDeployedElection(this.state.email).call({from: accounts[0]});
+    //     console.log(summary[2] + " values");
+    //     if(summary[2] == "Create an election.") {            
+    //         Router.pushRoute(`/election/create_election`);
+    //     }
+    //     else {           
+    //         Cookies.set('address',summary[0]);
+    //         Router.pushRoute(`/election/${summary[0]}/company_dashboard`);
+    //     }
+    // }
+    // catch (err) {
+    //     console.log(err.Message);
+    // }
+    
   }
 
   render() {
