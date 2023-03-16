@@ -35,8 +35,8 @@ module.exports = {
 
         CompanyModel.findOne({email:req.body.email}, function(err, CompanyInfo){
             
-            console.log(CompanyInfo.password + " - " + CompanyInfo.email);
-            console.log("Here in find ONE func.");
+            // console.log(CompanyInfo.password + " - " + CompanyInfo.email);
+            // console.log("Here in find ONE func.");
             if (err) {
                 cb(err);
                 // console.log(err+": errrrrr");

@@ -19,7 +19,7 @@ class DividerExampleVerticalForm extends Component {
   toggleVisibility = () => this.setState({ visible: !this.state.visible });  
   returnBackImage = () => (
     <div className='login-form'>
-    <style JSX>{`
+    <style jsx>{`
         .login-form {
             width:100vw;
             height:100vh;
@@ -75,7 +75,7 @@ class DividerExampleVerticalForm extends Component {
         "Content-type",
         "application/x-www-form-urlencoded"
       );
-      http.onreadystatechange = function() {
+      http.onreadystatechange = async function() {
         //Call a function when the state changes.
 
         if (http.readyState == 4 && http.status == 200) {
@@ -83,31 +83,33 @@ class DividerExampleVerticalForm extends Component {
 		  if(responseObj.status=="success") {
             Cookies.set('company_id', encodeURI(responseObj.data.id));
             Cookies.set('company_email', encodeURI(responseObj.data.email)); 
-            Router.pushRoute(`/election/create_election`);
+            // Router.pushRoute(`/election/create_election`);
 		  }
 		  else {
 			alert(responseObj.message);
 		  }
-          
         }
       };
       http.send(params); 
-    //   try {
-    //     const accounts = await web3.eth.getAccounts();
-    //     console.log(" in try section"+ " accounts: " + accounts[0]);
-    //     const summary = await Election_Factory.methods.getDeployedElection(this.state.email).call({from: accounts[0]});
-    //     console.log(summary[2] + " values");
-    //     if(summary[2] == "Create an election.") {            
-    //         Router.pushRoute(`/election/create_election`);
-    //     }
-    //     else {           
-    //         Cookies.set('address',summary[0]);
-    //         Router.pushRoute(`/election/${summary[0]}/company_dashboard`);
-    //     }
-    // }
-    // catch (err) {
-    //     console.log(err.Message);
-    // }
+      try {
+        console.log("in try block");
+        const accounts = await web3.eth.getAccounts();
+        console.log("account------------------------:" + accounts[0]);
+        console.log(this.state.email);
+        const summary = await Election_Factory.methods.getDeployedElection(this.state.email).call({from: accounts[0]});
+        console.log(summary);
+        const summaryStatus = summary[2]; // Save the summary status in a separate variable
+        if(summaryStatus == "Create an election.") {            
+            Router.pushRoute(`/election/create_election`);
+        }
+        else {           
+            Cookies.set('address',summary[0]);
+            Router.pushRoute(`/election/${summary[0]}/company_dashboard`);
+        }
+    }
+    catch (err) {
+        console.log("in catch block: " + err.Message);
+    }
     
   }
 
