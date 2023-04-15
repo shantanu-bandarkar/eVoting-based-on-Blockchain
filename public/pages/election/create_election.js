@@ -27,7 +27,7 @@ class LoginForm extends Component {
 				const summary = await Election_Factory.methods.getDeployedElection('xyz').call();
 				this.setState({ loading: false });
 				Cookies.set('address', summary[0]);
-				//Router.pushRoute(`/election/${summary[0]}/company_dashboard`);
+				Router.pushRoute(`/election/${summary[0]}/company_dashboard`);
 			}
 		} catch (err) {
 			this.setState({ errorMess: err.message });
