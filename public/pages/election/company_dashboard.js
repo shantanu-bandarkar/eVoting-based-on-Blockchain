@@ -3,7 +3,10 @@ import { Grid, Step, Icon, Menu, Sidebar, Container, Modal, Card, Header, Button
 import Layout from '../../components/Layout';
 import { Bar } from 'react-chartjs-2';
 import 'chartjs-plugin-annotation';
+import Election from '../../Ethereum/election';
 import Cookies from 'js-cookie';
+import web3 from '../../Ethereum/web3';
+import { Link, Router } from '../../routes';
 import { Helmet } from 'react-helmet';
 
 var b = 0;
@@ -62,7 +65,49 @@ class ContainerExampleContainer extends Component {
 		loading: false,
 		b: 0,
 	};
-	
+	async componentDidMount() {
+		var http = new XMLHttpRequest();
+		var url = '/voter/';
+		var params = 'election_address=' + Cookies.get('address');
+		http.open('POST', url, true);
+		//Send the proper header information along with the request
+		http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+		http.onreadystatechange = function () {
+			//Call a function when the state changes.
+			if (http.readyState == 4 && http.status == 200) {
+				var responseObj = JSON.parse(http.responseText);
+				if (responseObj.status == 'success') {
+					b = responseObj.count;
+				}
+			}
+		};
+		http.send(params);
+		try {
+			const add = Cookies.get('address');
+			const election = Election(add);
+			const summary = await election.methods.getElectionDetails().call();
+			const v = await election.methods.getNumOfVoters().call();
+			this.setState({ voters: v });
+			const c = await election.methods.getNumOfCandidates().call();
+			this.setState({ candidates: c });
+			this.setState({
+				election_name: summary[0],
+				election_desc: summary[1],
+			});
+
+			for (let i = 0; i < c; i++) {
+				const tp = await election.methods.getCandidate(i).call();
+				graphEmail.push(tp[0]);
+				graphVotes.push(tp[3]);
+			}
+			this.returnGraph();
+		} catch (err) {
+			console.log(err.message);
+			alert('Redirecting you to login page...');
+			Router.pushRoute('/company_login');
+		}
+		this.setState({ b: b });
+	}
 
 	getElectionDetails = () => {
 		const { election_name, election_desc } = this.state;
@@ -136,10 +181,46 @@ class ContainerExampleContainer extends Component {
 		Cookies.remove('company_email');
 		Cookies.remove('company_id');
 		alert('Logging out.');
-		
+		Router.pushRoute('/homepage');
 	}
 	endElection = async event => {
 		let candidate = 0;
+		try {
+			this.setState({ loading: true });
+			const add = Cookies.get('address');
+			const election = Election(add);
+			candidate = await election.methods.winnerCandidate().call();
+			cand = await election.methods.getCandidate(candidate).call();
+			var http = new XMLHttpRequest();
+			var url = '/voter/resultMail';
+			var params =
+				'election_address=' +
+				Cookies.get('address') +
+				'&election_name=' +
+				this.state.election_name +
+				'&candidate_email=' +
+				cand[4] +
+				'&winner_candidate=' +
+				cand[0];
+			http.open('POST', url, true);
+			//Send the proper header information along with the request
+			http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+			http.onreadystatechange = function () {
+				//Call a function when the state changes.
+				if (http.readyState == 4 && http.status == 200) {
+					var responseObj = JSON.parse(http.responseText);
+					if (responseObj.status == 'success') {
+						alert('Mail sent!');
+					} else {
+						alert(responseObj.message);
+					}
+				}
+			};
+			this.setState({ loading: true });
+			http.send(params);
+		} catch (err) {
+			console.log(err.message);
+		}
 	};
 
 	returnModal = () => <h1>I won the election</h1>;
