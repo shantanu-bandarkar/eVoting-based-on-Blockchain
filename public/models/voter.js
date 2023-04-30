@@ -12,6 +12,10 @@ const VoterSchema = new Schema ({
         type: String,
         required: true
     },
+    election_address: {
+        type: String,
+        required: true
+    }
 });
 // hash user password before saving into database
 VoterSchema.pre('save', function(cb) {

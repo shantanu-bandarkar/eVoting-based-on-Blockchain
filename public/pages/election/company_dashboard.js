@@ -181,8 +181,8 @@ class ContainerExampleContainer extends Component {
 		Cookies.remove('company_email');
 		Cookies.remove('company_id');
 		alert('Logging out.');
-		Router.pushRoute('/homepage');
-	}
+ 		Router.pushRoute('/company_login');
+		}
 	endElection = async event => {
 		let candidate = 0;
 		try {

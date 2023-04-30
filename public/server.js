@@ -1,5 +1,6 @@
 const next = require('next');
 const express = require('express');
+const voter = require('./routes/voter');
 const company = require('./routes/company');
 const bodyParser = require('body-parser');
 const mongoose = require('./config/database');
@@ -22,6 +23,7 @@ exp.get('/', function (req, res) {
 
 exp.use('/company', company);
 
+exp.use('/voter', voter);
 
 
 const app = next({
