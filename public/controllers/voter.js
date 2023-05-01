@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const path = require("path");
 
 var nodemailer = require("nodemailer");
+const { getMaxListeners } = require("process");
 
 const saltRounds = 10;
 
@@ -38,14 +39,17 @@ module.exports = {
                     service: "gmail",
 
                     auth: {
-                      user: process.env.EMAIL,
+                      // user: process.env.EMAIL,
 
-                      pass: process.env.PASSWORD,
+                      // pass: process.env.PASSWORD,
+                      user: 'shantanub0110@gmail.com',
+
+                      pass: 'nsutiblauxrgygpf',
                     },
                   });
 
                   const mailOptions = {
-                    from: process.env.EMAIL, // sender address
+                    from: 'shantanub0110@gmail.com', // sender address
 
                     to: voter.email, // list of receivers
 
