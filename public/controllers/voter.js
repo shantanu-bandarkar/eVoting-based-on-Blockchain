@@ -44,7 +44,7 @@ module.exports = {
                       // pass: process.env.PASSWORD,
                       user: 'shantanub0110@gmail.com',
 
-                      pass: 'nsutiblauxrgygpf',
+                      pass: 'aysmskbciaawcfpp',
                     },
                   });
 

@@ -5,7 +5,7 @@
 /.next
 /.pnp
 .pnp.js
-
+/ipfs.js
 # testing
 /coverage
 

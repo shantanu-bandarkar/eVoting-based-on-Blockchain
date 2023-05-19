@@ -2,6 +2,7 @@ const next = require('next');
 const express = require('express');
 const voter = require('./routes/voter');
 const company = require('./routes/company');
+const candidate = require('./routes/candidate');
 const bodyParser = require('body-parser');
 const mongoose = require('./config/database');
 const exp = express();
@@ -25,6 +26,7 @@ exp.use('/company', company);
 
 exp.use('/voter', voter);
 
+exp.use('/candidate', candidate);
 
 const app = next({
 	dev: process.env.NODE_ENV !== 'production',

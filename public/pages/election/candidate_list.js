@@ -14,7 +14,11 @@ import {
   Card,
 } from "semantic-ui-react";
 import Layout from "../../components/Layout";
+import web3 from "../../Ethereum/web3";
 import Cookies from "js-cookie";
+import { Link, Router } from "../../routes";
+import Election from "../../Ethereum/election";
+import ipfs from "../../ipfs";
 import { Helmet } from "react-helmet";
 class VotingList extends Component {
   state = {
@@ -25,8 +29,60 @@ class VotingList extends Component {
     cand_name: "",
     cand_desc: "",
     buffer: "",
+    ipfsHash: null,
     loading: false,
   };
+
+  async componentDidMount() {
+    try {
+      const add = Cookies.get("address");
+      const election = Election(add);
+      const summary = await election.methods.getElectionDetails().call();
+      this.setState({
+        election_name: summary[0],
+        election_description: summary[1],
+      });
+      const c = await election.methods.getNumOfCandidates().call();
+      console.log("number of candidates c",c);
+      if (c == 0) alert("Register a candidate first!");
+      else{
+        console.log("AAAAAAAA",c);
+      }
+      let candidates = [];
+      for (let i = 0; i < c; i++) {
+        candidates.push(await election.methods.getCandidate(i).call());
+      }
+      let i = -1;
+      const items = candidates.map((candidate) => {
+        i++;
+        console.log(candidate[2]);
+        console.log("candidates details", candidate[0]);
+
+        return {
+          header: candidate[0],
+          description: candidate[1],
+          // image: (
+          //   <Image
+          //     id={i}
+          //     src={`https://ipfs.io/ipfs/${candidate[2]}`}
+          //     style={{ maxWidth: "100%", maxHeight: "190px" }}
+          //   />
+          // ),
+          extra: (
+            <div>
+              <Icon name="pie graph" iconPostion="left" />
+              {candidate[3].toString()}
+            </div>
+          ),
+        };
+      });
+      this.setState({ item: items });
+    } catch (err) {
+      console.log(err.message);
+      alert("Redirecting you to login page...");
+      Router.pushRoute("/company_login");
+    }
+  }
   getElectionDetails = () => {
     const { election_name, election_description } = this.state;
 
@@ -61,6 +117,58 @@ class VotingList extends Component {
     const buffer = await Buffer.from(reader.result);
     //set this buffer -using es6 syntax
     this.setState({ buffer });
+  };
+
+  onSubmit = async (event) => {
+    event.preventDefault();
+    this.setState({ loading: true });
+    const accounts = await web3.eth.getAccounts();
+
+    try {
+      const add = Cookies.get("address");
+      const election = Election(add);
+      election.methods
+      .addCandidate(
+        this.state.cand_name,
+        this.state.cand_desc,
+        document.getElementById("email").value
+      )
+      .send(
+        {
+          from: accounts[0],
+        },
+        (error, transactionHash) => {}
+      );
+      // await ipfs.add(this.state.buffer, (err, ipfsHash) => {
+      //   this.setState({ ipfsHash: ipfsHash[0].hash });
+      
+      // });
+      alert("Added!");
+    } catch (err) {
+      alert("Error in file processing.");
+    }
+    //ajax script below
+    const email = document.getElementById("email").value;
+    var http = new XMLHttpRequest();
+    var url = "/candidate/registerCandidate";
+    var params =
+      "email=" + email + "&election_name=" + this.state.election_name;
+    http.open("POST", url, true);
+    //Send the proper header information along with the request
+    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    http.onreadystatechange = function () {
+      //Call a function when the state changes.
+      if (http.readyState == 4 && http.status == 200) {
+        var responseObj = JSON.parse(http.responseText);
+        if (responseObj.status == "success") {
+          alert(responseObj.message);
+        } else {
+          alert(responseObj.message);
+        }
+      }
+    };
+    http.send(params);
+    this.setState({ loading: false });
   };
 
   GridExampleGrid = () => <Grid>{columns}</Grid>;
@@ -113,12 +221,13 @@ class VotingList extends Component {
         </Button>
       </Sidebar>
     </Sidebar.Pushable>
-  )
+  );
   signOut() {
     Cookies.remove("address");
     Cookies.remove("company_email");
     Cookies.remove("company_id");
     alert("Logging out.");
+    Router.pushRoute("/homepage");
   }
 
   render() {
@@ -169,7 +278,8 @@ class VotingList extends Component {
                           }
                           textAlign="center"
                         />
-                        <p>Image:</p>
+
+                        {/* <p>Image:</p>
 
                         <div
                           class="ui fluid"
@@ -198,7 +308,7 @@ class VotingList extends Component {
                           </label>
                         </div>
                         <br />
-                        <br />
+                        <br /> */}
                         <br />
                         <p>Description:</p>
                         <Form.Input
