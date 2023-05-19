@@ -53,7 +53,6 @@ contract Election {
     struct Candidate {
         string candidate_name;
         string candidate_description;
-        string imgHash;
         uint8 voteCount;
         string email;
     }
@@ -83,9 +82,9 @@ contract Election {
 
     //function to add candidate to mapping
 
-    function addCandidate(string memory candidate_name, string memory candidate_description, string memory imgHash,string memory email) public owner {
+    function addCandidate(string memory candidate_name, string memory candidate_description,string memory email) public owner {
         uint8 candidateID = numCandidates++; //assign id of the candidate
-        candidates[candidateID] = Candidate(candidate_name,candidate_description,imgHash,0,email); //add the values to the mapping
+        candidates[candidateID] = Candidate(candidate_name,candidate_description,0,email); //add the values to the mapping
     }
     //function to vote and check for double voting
 
@@ -114,8 +113,8 @@ contract Election {
 
     //function to get candidate information
 
-    function getCandidate(uint8 candidateID) public view returns (string memory, string memory, string memory, uint8,string memory) {
-        return (candidates[candidateID].candidate_name, candidates[candidateID].candidate_description, candidates[candidateID].imgHash, candidates[candidateID].voteCount, candidates[candidateID].email);
+    function getCandidate(uint8 candidateID) public view returns (string memory, string memory, uint8,string memory) {
+        return (candidates[candidateID].candidate_name, candidates[candidateID].candidate_description,  candidates[candidateID].voteCount, candidates[candidateID].email);
     } 
 
     //function to return winner candidate information
