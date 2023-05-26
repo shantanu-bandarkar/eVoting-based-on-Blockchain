@@ -189,8 +189,10 @@ class ContainerExampleContainer extends Component {
 			this.setState({ loading: true });
 			const add = Cookies.get('address');
 			const election = Election(add);
+			console.log("Election", election);
 			candidate = await election.methods.winnerCandidate().call();
 			cand = await election.methods.getCandidate(candidate).call();
+			console.log("Cand", cand);
 			var http = new XMLHttpRequest();
 			var url = '/voter/resultMail';
 			var params =
@@ -199,7 +201,7 @@ class ContainerExampleContainer extends Component {
 				'&election_name=' +
 				this.state.election_name +
 				'&candidate_email=' +
-				cand[4] +
+				cand[3] +
 				'&winner_candidate=' +
 				cand[0];
 			http.open('POST', url, true);

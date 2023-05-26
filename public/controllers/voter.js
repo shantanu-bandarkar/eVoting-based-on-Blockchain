@@ -177,12 +177,12 @@ module.exports = {
               var transporter = nodemailer.createTransport({
                 service: "gmail",
                 auth: {
-                  user: process.env.EMAIL,
-                  pass: process.env.PASSWORD,
+                  user: 'shantanub0110@gmail.com',
+                  pass: 'aysmskbciaawcfpp',
                 },
               });
               const mailOptions = {
-                from: process.env.EMAIL, // sender address
+                from: 'shantanub0110@gmail.com', // sender address
                 to: voterInfo.email, // list of receivers
                 subject: req.body.election_name, // Subject line
                 html:
@@ -252,14 +252,14 @@ module.exports = {
               service: "gmail",
 
               auth: {
-                user: process.env.EMAIL,
+                user: 'shantanub0110@gmail.com',
 
-                pass: process.env.PASSWORD,
+                pass: 'aysmskbciaawcfpp',
               },
             });
 
             const mailOptions = {
-              from: process.env.EMAIL, // sender address
+              from: 'shantanub0110@gmail.com', // sender address
 
               to: voter.email, // list of receivers
 
@@ -296,14 +296,14 @@ module.exports = {
             service: "gmail",
 
             auth: {
-              user: process.env.EMAIL,
+              user: 'shantanub0110@gmail.com',
 
-              pass: process.env.PASSWORD,
+              pass: 'aysmskbciaawcfpp',
             },
           });
 
           const mailOptions = {
-            from: process.env.EMAIL, // sender address
+            from: 'shantanub0110@gmail.com', // sender address
 
             to: req.body.candidate_email, // list of receivers
 

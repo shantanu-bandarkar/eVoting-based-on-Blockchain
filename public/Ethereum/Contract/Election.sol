@@ -119,7 +119,7 @@ contract Election {
 
     //function to return winner candidate information
 
-    function winnerCandidate() public view owner returns (uint8) {
+    function winnerCandidate() public view returns (uint8) {
         uint8 largestVotes = candidates[0].voteCount;
         uint8 candidateID;
         for(uint8 i = 1;i<numCandidates;i++) {

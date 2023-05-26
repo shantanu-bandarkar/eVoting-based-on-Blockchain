@@ -29,7 +29,7 @@ const HomepageHeading = ({ mobile }) => (
 				fontWeight: 'normal',
 				marginBottom: 0,
 				marginTop: mobile ? '1.5em' : '2em',
-				color: 'black',
+				color: 'white',
 			}}
 		/>
 		<Header
@@ -40,7 +40,7 @@ const HomepageHeading = ({ mobile }) => (
 				fontSize: mobile ? '1.5em' : '1.7em',
 				fontWeight: 'normal',
 				marginTop: mobile ? '0.5em' : '1.5em',
-				color: 'grey',
+				color: 'white',
 			}}
 		/>
 		<div style={{ float: 'left', marginTop: '10%' }}>
