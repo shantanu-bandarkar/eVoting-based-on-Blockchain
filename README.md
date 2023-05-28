@@ -1,27 +1,23 @@
 # eVoting-based-on-Blockchain
-this is the repo for eVoting based on Blockchin
+This is the repo for eVoting based on Blockchin.
 
-step 1:- learning solidity language
+step 1: Understanding solidity language.
 
-step 2: learning Metamask(cryptowallet) and Ganche 
+step 2: Understanding Metamask(cryptowallet) and Ganche. 
 
-step 3:-how to connect third web connection(web3)
+step 3: Understanding and connection of Web3.
 
-step 4:- learning hardhat framework
+step 4: Understand remix Ide for etheruam.
 
-step 5:-understand remix Ide
+step 5: Create UI with Reactjs.
 
-step 6:- create UI with Reactjs
+step 6: Connetction of Mongo DB.
 
-step 7:-web3 connection with reactjs and smart contract
+step 7: Understand the thirdweb framework package and some command
 
-step 8:-understand the thirdweb framework package and some command
+step 8: Use Ganache for local machine instade of Goerli Faucet. 
 
-step 9:-understand the Goerli Faucet(send ether to address and check metamask)
-uses of goerli faucet(How does goerli testnet work?
-Goerli is a testnet, a decentralized computing network who's ledger is separate from the main Ethereum ledger, 
-so transactions do not cross over between the two)
 
-step 10:-thirdweb interface connect to metamask
-
-step 11:-
+Refrences:
+    * https://www.researchgate.net/publication/362136863_Security_Requirement_Analysis_of_Blockchain-Based_E-Voting_Systems
+    * https://jwcn-eurasipjournals.springeropen.com/articles/10.1186/s13638-019-1473-6
