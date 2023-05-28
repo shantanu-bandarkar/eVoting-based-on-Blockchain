@@ -30,11 +30,35 @@ class DividerExampleVerticalForm extends Component {
       `}</style>
   </div>
   )
+  	//validation 
+	validateEmail = (email) => {
+		
+		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		return emailRegex.test(email);
+	};
+
+	validatePassword = (password) => {
+		const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+		return passwordRegex.test(password);
+	};
+//validation
+
   
   signup = event => {
     const email = document.getElementById('signup_email').value;
+  
     const password = document.getElementById('signup_password').value;
     const repeat_password = document.getElementById('signup_repeat_password').value;
+//validation for mail
+if (!this.validateEmail(email)) {
+  emailError = 'Invalid email address';
+}
+
+if (!this.validatePassword(password)) {
+  passwordError = 'Password must contain at least one uppercase and one lowercase character';
+}
+//validation for password
+
     if(password!=repeat_password){
 		alert("Passwords do not match");		
 	}

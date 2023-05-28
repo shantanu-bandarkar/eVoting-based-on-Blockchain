@@ -9,6 +9,21 @@ class LoginForm extends Component {
 		election_address: '',
 	};
 
+
+	//validation 
+	validateEmail = (email) => {
+		
+		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		return emailRegex.test(email);
+	};
+
+	validatePassword = (password) => {
+		const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+		return passwordRegex.test(password);
+	};
+//validation
+
+
 	LoginForm = () => (
 		<div className="login-form">
 			<style JSX>{`
@@ -55,6 +70,17 @@ class LoginForm extends Component {
 		</div>
 	);
 	signin = event => {
+		
+	//validation for mail
+	if (!this.validateEmail(email)) {
+		emailError = 'Invalid email address';
+	}
+
+	if (!this.validatePassword(password)) {
+		passwordError = 'Password must contain at least one uppercase and one lowercase character';
+	}
+	//validation for password
+ 
 		const email = document.getElementById('signin_email').value;
 		const password = document.getElementById('signin_password').value;
 		var http = new XMLHttpRequest();
