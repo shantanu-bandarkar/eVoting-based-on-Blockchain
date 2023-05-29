@@ -42,10 +42,10 @@ class VotingList extends Component {
         election_description: summary[1],
       });
       const c = await election.methods.getNumOfCandidates().call();
-      console.log("number of candidates c", c);
+      console.log("number of candidates c",c);
       if (c == 0) alert("Register a candidate first!");
-      else {
-        console.log("AAAAAAAA", c);
+      else{
+        console.log("AAAAAAAA",c);
       }
       let candidates = [];
       for (let i = 0; i < c; i++) {
@@ -127,20 +127,20 @@ class VotingList extends Component {
       const add = Cookies.get("address");
       const election = Election(add);
       election.methods
-        .addCandidate(
-          this.state.cand_name,
-          this.state.cand_desc,
-          document.getElementById("email").value
-        )
-        .send(
-          {
-            from: accounts[0],
-          },
-          (error, transactionHash) => {}
-        );
+      .addCandidate(
+        this.state.cand_name,
+        this.state.cand_desc,
+        document.getElementById("email").value
+      )
+      .send(
+        {
+          from: accounts[0],
+        },
+        (error, transactionHash) => {}
+      );
       // await ipfs.add(this.state.buffer, (err, ipfsHash) => {
       //   this.setState({ ipfsHash: ipfsHash[0].hash });
-
+      
       // });
       alert("Added!");
     } catch (err) {
