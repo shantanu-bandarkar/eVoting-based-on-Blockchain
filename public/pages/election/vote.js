@@ -77,7 +77,7 @@ class VotingList extends Component {
               //   ),
               extra: (
                   <div>
-                    <Icon name='pie graph' size='big' iconPostion='left'/>  
+                    <Icon name='mail' size='big' iconPostion='left'/>  
                     {candidate[3].toString()}  
                     <Button id={i} style={{float: 'right'}} onClick={this.vote} primary>Vote!</Button>
                 </div>

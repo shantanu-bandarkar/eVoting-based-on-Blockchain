@@ -11,8 +11,8 @@ import { Helmet } from 'react-helmet';
 
 var b = 0;
 let cand = [];
-let graphEmail = [];
-let graphVotes = [];
+// let graphEmail = [];
+// let graphVotes = [];
 
 const options = {
 	maintainAspectRatio: true,
@@ -39,20 +39,20 @@ const options = {
 	},
 };
 
-const data = {
-	labels: graphEmail,
-	datasets: [
-		{
-			label: 'Vote Counts',
-			backgroundColor: 'rgba(255,99,132,0.2)',
-			borderColor: 'rgba(255,99,132,1)',
-			borderWidth: 2,
-			hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-			hoverBorderColor: 'rgba(255,99,132,1)',
-			data: graphVotes,
-		},
-	],
-};
+// const data = {
+// 	labels: graphEmail,
+// 	datasets: [
+// 		{
+// 			label: 'Vote Counts',
+// 			backgroundColor: 'rgba(255,99,132,0.2)',
+// 			borderColor: 'rgba(255,99,132,1)',
+// 			borderWidth: 2,
+// 			hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+// 			hoverBorderColor: 'rgba(255,99,132,1)',
+// 			data: graphVotes,
+// 		},
+// 	],
+// };
 
 class ContainerExampleContainer extends Component {
 	state = {
@@ -95,12 +95,12 @@ class ContainerExampleContainer extends Component {
 				election_desc: summary[1],
 			});
 
-			for (let i = 0; i < c; i++) {
-				const tp = await election.methods.getCandidate(i).call();
-				graphEmail.push(tp[0]);
-				graphVotes.push(tp[3]);
-			}
-			this.returnGraph();
+			// for (let i = 0; i < c; i++) {
+			// 	const tp = await election.methods.getCandidate(i).call();
+			// 	graphEmail.push(tp[0]);
+			// 	graphVotes.push(tp[3]);
+			// }
+			// this.returnGraph();
 		} catch (err) {
 			console.log(err.message);
 			alert('Redirecting you to login page...');
@@ -220,6 +220,11 @@ class ContainerExampleContainer extends Component {
 			};
 			this.setState({ loading: true });
 			http.send(params);
+			Cookies.remove('address');
+			Cookies.remove('company_email');
+			Cookies.remove('company_id');
+			alert('Logging out.');
+			Router.pushRoute('/company_login');
 		} catch (err) {
 			console.log(err.message);
 		}
@@ -227,7 +232,7 @@ class ContainerExampleContainer extends Component {
 
 	returnModal = () => <h1>I won the election</h1>;
 
-	returnGraph = () => <Bar data={data} width={120} height={50} options={options} />;
+	// returnGraph = () => <Bar data={data} width={120} height={50} options={options} />;
 
 	render() {
 		return (
@@ -251,7 +256,7 @@ class ContainerExampleContainer extends Component {
 								>
 									End election
 								</Button>
-								<Step.Group style={{ minWidth: 1130, minHeight: 90 }}>
+								<Step.Group style={{ minWidth: 1130, minHeight: 300 }}>
 									<Step icon="users" title="Voters" description={this.state.b} />
 									<Step icon="user outline" title="Candidates" description={this.state.candidates} />
 									<Step
@@ -262,18 +267,18 @@ class ContainerExampleContainer extends Component {
 								</Step.Group>
 								{this.CardExampleGroupProps()}
 
-								<Grid.Column>
+								{/* <Grid.Column>
 									<br />
 									<div className="he">
 										<style jsx>{`
 											.he {
-												height: 50%;
+												height: 100%;
 												max-width: 100%;
 											}
 										`}</style>
-										{this.returnGraph()}
-									</div>
-								</Grid.Column>
+										{/* {this.returnGraph()} */}
+									{/* </div> */}
+								{/* </Grid.Column> */} 
 							</Grid.Column>
 						</Layout>
 					</Grid.Row>
