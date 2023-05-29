@@ -6,68 +6,63 @@ import {
   Form,
   Grid,
   Segment,
-  Message
+  Message,
 } from "semantic-ui-react";
-import {Router} from '../routes'
+import { Router } from "../routes";
 import web3 from "../Ethereum/web3";
 import Election_Factory from "../Ethereum/election_factory";
-import Cookies from 'js-cookie';
-import {Helmet} from 'react-helmet'
+import Cookies from "js-cookie";
+import { Helmet } from "react-helmet";
 
 class DividerExampleVerticalForm extends Component {
-  state = { visible: true, email: ''};
-  toggleVisibility = () => this.setState({ visible: !this.state.visible });  
+  state = { visible: true, email: "" };
+  toggleVisibility = () => this.setState({ visible: !this.state.visible });
   returnBackImage = () => (
-    <div className='login-form'>
-    <style jsx>{`
+    <div className="login-form">
+      <style jsx>{`
         .login-form {
-            width:100vw;
-            height:100vh;
-            position:absolute; 
-            background: url('../../static/blockchain.jpg') no-repeat;
-            z-index: -1;
+          width: 100vw;
+          height: 100vh;
+          position: absolute;
+          background: url("../../static/blockchain.jpg") no-repeat;
+          z-index: -1;
         }
       `}</style>
-  </div>
-  )
-  
-  signup = event => {
-    const email = document.getElementById('signup_email').value;
-    const password = document.getElementById('signup_password').value;
-    const repeat_password = document.getElementById('signup_repeat_password').value;
-    if(password!=repeat_password){
-		alert("Passwords do not match");		
-	}
-	else {
-    var http = new XMLHttpRequest();
-    var url = 'company/register';
-    var params = 'email='+email+'&password='+password;
-    http.open('POST', url, true);
-    //Send the proper header information along with the request
-    http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    http.onreadystatechange = function() {//Call a function when the state changes.
-        if(http.readyState == 4 && http.status == 200) {
-            var responseObj = JSON.parse(http.responseText)
-            if(responseObj.status=="success") {					                    
-                    Cookies.set('company_email', encodeURI(responseObj.data.email));                    				                    
-                    alert("Added!");
-                    Router.pushRoute(`/company_login`);
-			}
-			else {
-				alert(responseObj.message);
-			}
-		}
-	
+    </div>
+  );
+  //validation
+  validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  validatePassword = (password) => {
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+    return passwordRegex.test(password);
+  };
+  //validation
+
+  signup = (event) => {
+    const email = document.getElementById("signup_email").value;
+    const password = document.getElementById("signup_password").value;
+    const repeat_password = document.getElementById(
+      "signup_repeat_password"
+    ).value;
+    //validation for mail
+    if (!this.validateEmail(email)) {
+      const emailError = "Email must be of the form username@email.com";
+      alert(emailError);
+    } else if (!this.validatePassword(password)) {
+      const passwordError =
+        "Password must contain at least one uppercase, one special character, and on numeric character";
+      alert(passwordError);
     }
-	http.send(params); 
-	}
-  }
-  signin =  async event => {
-      const email = document.getElementById('signin_email').value;
-      this.setState({email: document.getElementById('signin_email').value});
-      const password = document.getElementById("signin_password").value;
+    //validation for password
+    else if (password != repeat_password) {
+      alert("Passwords do not match");
+    } else {
       var http = new XMLHttpRequest();
-      var url = "company/authenticate";
+      var url = "company/register";
       var params = "email=" + email + "&password=" + password;
       http.open("POST", url, true);
       //Send the proper header information along with the request
@@ -75,43 +70,67 @@ class DividerExampleVerticalForm extends Component {
         "Content-type",
         "application/x-www-form-urlencoded"
       );
-      http.onreadystatechange = async function() {
+      http.onreadystatechange = function () {
         //Call a function when the state changes.
-
         if (http.readyState == 4 && http.status == 200) {
-		  var responseObj = JSON.parse(http.responseText);
-		  if(responseObj.status=="success") {
-            Cookies.set('company_id', encodeURI(responseObj.data.id));
-            Cookies.set('company_email', encodeURI(responseObj.data.email)); 
-            // Router.pushRoute(`/election/create_election`);
-		  }
-		  else {
-			alert(responseObj.message);
-		  }
+          var responseObj = JSON.parse(http.responseText);
+          if (responseObj.status == "success") {
+            Cookies.set("company_email", encodeURI(responseObj.data.email));
+            alert("Added!");
+            Router.pushRoute(`/company_login`);
+          } else {
+            alert(responseObj.message);
+          }
         }
       };
-      http.send(params); 
-      try {
-        console.log("in try block");
-        const accounts = await web3.eth.getAccounts();
-        console.log("account------------------------:" + accounts[0]);
-        console.log(this.state.email);
-        const summary = await Election_Factory.methods.getDeployedElection(this.state.email).call({from: accounts[0]});
-        console.log(summary);
-        const summaryStatus = summary[2]; // Save the summary status in a separate variable
-        if(summaryStatus == "Create an election.") {            
-            Router.pushRoute(`/election/create_election`);
-        }
-        else {           
-            Cookies.set('address',summary[0]);
-            Router.pushRoute(`/election/${summary[0]}/company_dashboard`);
-        }
+      http.send(params);
     }
-    catch (err) {
-        console.log("in catch block: " + err.Message);
+  };
+  signin = async (event) => {
+    const email = document.getElementById("signin_email").value;
+    this.setState({ email: document.getElementById("signin_email").value });
+    const password = document.getElementById("signin_password").value;
+    var http = new XMLHttpRequest();
+    var url = "company/authenticate";
+    var params = "email=" + email + "&password=" + password;
+    http.open("POST", url, true);
+    //Send the proper header information along with the request
+    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    http.onreadystatechange = async function () {
+      //Call a function when the state changes.
+
+      if (http.readyState == 4 && http.status == 200) {
+        var responseObj = JSON.parse(http.responseText);
+        if (responseObj.status == "success") {
+          Cookies.set("company_id", encodeURI(responseObj.data.id));
+          Cookies.set("company_email", encodeURI(responseObj.data.email));
+          // Router.pushRoute(`/election/create_election`);
+        } else {
+          alert(responseObj.message);
+        }
+      }
+    };
+    http.send(params);
+    try {
+      console.log("in try block");
+      const accounts = await web3.eth.getAccounts();
+      console.log("account------------------------:" + accounts[0]);
+      console.log(this.state.email);
+      const summary = await Election_Factory.methods
+        .getDeployedElection(this.state.email)
+        .call({ from: accounts[0] });
+      console.log(summary);
+      const summaryStatus = summary[2]; // Save the summary status in a separate variable
+      if (summaryStatus == "Create an election.") {
+        Router.pushRoute(`/election/create_election`);
+      } else {
+        Cookies.set("address", summary[0]);
+        Router.pushRoute(`/election/${summary[0]}/company_dashboard`);
+      }
+    } catch (err) {
+      console.log("in catch block: " + err.Message);
     }
-    
-  }
+  };
 
   render() {
     const { visible } = this.state;
@@ -122,7 +141,7 @@ class DividerExampleVerticalForm extends Component {
           href="//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"
         />
         <Helmet>
-            <title>Company Login</title>
+          <title>Company Login</title>
         </Helmet>
         <div>
           {this.returnBackImage()}
@@ -221,7 +240,7 @@ class DividerExampleVerticalForm extends Component {
                         style={{ marginBottom: 15 }}
                       >
                         Submit
-                      </Button>                      
+                      </Button>
                     </Form>
                   </Transition>
                 </Segment>
