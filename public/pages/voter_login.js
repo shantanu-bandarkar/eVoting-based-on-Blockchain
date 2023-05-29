@@ -17,6 +17,7 @@ class LoginForm extends Component {
     election_address: "",
   };
 
+<<<<<<< HEAD
   //validation
   validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -26,6 +27,26 @@ class LoginForm extends Component {
   LoginForm = () => (
     <div className="login-form">
       <style JSX>{`
+=======
+
+	//validation 
+	validateEmail = (email) => {
+		
+		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		return emailRegex.test(email);
+	};
+
+	validatePassword = (password) => {
+		const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+		return passwordRegex.test(password);
+	};
+//validation
+
+
+	LoginForm = () => (
+		<div className="login-form">
+			<style JSX>{`
+>>>>>>> 44646a8467b37cf5cb197212ae1b845786d832a2
                 .login-form {
                     width:100%;
                     height:100%;
@@ -68,6 +89,7 @@ class LoginForm extends Component {
                 type="password"
               />
 
+<<<<<<< HEAD
               <Button
                 color="blue"
                 fluid
@@ -120,6 +142,52 @@ class LoginForm extends Component {
       http.send(params);
     }
   };
+=======
+							<Button color="blue" fluid size="large" style={{ marginBottom: 15 }} onClick={this.signin}>
+								Submit
+							</Button>
+						</Segment>
+					</Form>
+				</Grid.Column>
+			</Grid>
+		</div>
+	);
+	signin = event => {
+		
+	//validation for mail
+	if (!this.validateEmail(email)) {
+		emailError = 'Invalid email address';
+	}
+
+	if (!this.validatePassword(password)) {
+		passwordError = 'Password must contain at least one uppercase and one lowercase character';
+	}
+	//validation for password
+ 
+		const email = document.getElementById('signin_email').value;
+		const password = document.getElementById('signin_password').value;
+		var http = new XMLHttpRequest();
+		var url = 'voter/authenticate';
+		var params = 'email=' + email + '&password=' + password;
+		http.open('POST', url, true);
+		//Send the proper header information along with the request
+		http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+		http.onreadystatechange = function () {
+			//Call a function when the state changes.
+			if (http.readyState == 4 && http.status == 200) {
+				var responseObj = JSON.parse(http.responseText);
+				if (responseObj.status == 'success') {
+					Cookies.set('voter_email', encodeURI(email));
+					Cookies.set('address', encodeURI(responseObj.data.election_address));
+					Router.pushRoute(`/election/${responseObj.data.election_address}/vote`);
+				} else {
+					alert(responseObj.message);
+				}
+			}
+		};
+		http.send(params);
+	};
+>>>>>>> 44646a8467b37cf5cb197212ae1b845786d832a2
 
   render() {
     return (

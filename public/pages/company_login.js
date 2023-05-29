@@ -28,6 +28,7 @@ class DividerExampleVerticalForm extends Component {
           z-index: -1;
         }
       `}</style>
+<<<<<<< HEAD
     </div>
   );
   //validation
@@ -56,6 +57,62 @@ class DividerExampleVerticalForm extends Component {
       const passwordError =
         "Password must contain at least one uppercase, one special character, and on numeric character";
       alert(passwordError);
+=======
+  </div>
+  )
+  	//validation 
+	validateEmail = (email) => {
+		
+		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		return emailRegex.test(email);
+	};
+
+	validatePassword = (password) => {
+		const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+		return passwordRegex.test(password);
+	};
+//validation
+
+  
+  signup = event => {
+    const email = document.getElementById('signup_email').value;
+  
+    const password = document.getElementById('signup_password').value;
+    const repeat_password = document.getElementById('signup_repeat_password').value;
+//validation for mail
+if (!this.validateEmail(email)) {
+  emailError = 'Invalid email address';
+}
+
+if (!this.validatePassword(password)) {
+  passwordError = 'Password must contain at least one uppercase and one lowercase character';
+}
+//validation for password
+
+    if(password!=repeat_password){
+		alert("Passwords do not match");		
+	}
+	else {
+    var http = new XMLHttpRequest();
+    var url = 'company/register';
+    var params = 'email='+email+'&password='+password;
+    http.open('POST', url, true);
+    //Send the proper header information along with the request
+    http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    http.onreadystatechange = function() {//Call a function when the state changes.
+        if(http.readyState == 4 && http.status == 200) {
+            var responseObj = JSON.parse(http.responseText)
+            if(responseObj.status=="success") {					                    
+                    Cookies.set('company_email', encodeURI(responseObj.data.email));                    				                    
+                    alert("Added!");
+                    Router.pushRoute(`/company_login`);
+			}
+			else {
+				alert(responseObj.message);
+			}
+		}
+	
+>>>>>>> 44646a8467b37cf5cb197212ae1b845786d832a2
     }
     //validation for password
     else if (password != repeat_password) {
